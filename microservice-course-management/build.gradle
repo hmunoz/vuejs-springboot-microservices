@@ -11,7 +11,9 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
 //Set configure docker
+//https://medium.com/curiosity-driven-development/how-to-dockerize-a-spring-boot-app-with-googles-jib-53dcac56a2e1
 jib.to.image = "microservice/course"
+jib.from.image = "openjdk:alpine"
 
 configurations {
 	compileOnly {
