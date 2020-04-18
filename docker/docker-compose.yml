@@ -1,0 +1,36 @@
+version: '3'
+services:
+
+  course-mysql:
+    image: mysql:8.0.19
+    # volumes:
+    #     - ~/volumes/jhipster/y/mysql/:/var/lib/mysql/
+    environment:
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=micro_course
+    ports:
+      - '33062:3306'
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+
+  discovery:
+    image: 'microservice/discovery'
+    ports:
+      - '8761:8761'
+
+  course:
+    image: 'microservice/course'
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      # - SPRING_PROFILES_ACTIVE=prod,swagger
+      # - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      # - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/micro_course?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
+    ports:
+      - '8001:8001'
+    links:
+      - 'discovery:discovery'
+      - 'course-mysql:course-mysql'
+    depends_on:
+      - "discovery"
+      - "course-mysql"
