@@ -1,4 +1,4 @@
-version: '3'
+version: '3.3'
 services:
   #https://github.com/cer/microservices-examples/blob/master/docker-compose.yml
   course-mysql:
@@ -10,15 +10,35 @@ services:
       - MYSQL_PASSWORD=root
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=micro_course
+    healthcheck:
+      test: ["CMD-SHELL", 'mysqladmin ping']
+      interval: 10s
+      timeout: 2s
+      retries: 10
+    restart: unless-stopped
     ports:
-      - '33062:3306'
+      - target: 3306
+        published: 33062
+        protocol: tcp
+        mode: host
     command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
   eureka:
-    image: 'microservice/discovery'
+    image: "microservice/discovery"
+    expose:
+      - 8761
     ports:
-      - '9001:8761'
+      - target: 8761
+        published: 9001
+        protocol: tcp
+        mode: host
+    restart: unless-stopped
+#    healthcheck:
+#      test: ["CMD", "curl", "--fail", "--silent", "localhost:8761/actuator/health 2>&1 | grep UP || exit 1"]
+#      interval: 10s
+#      timeout: 2s
+#      retries: 10
   course:
-    image: 'microservice/course'
+    image: "microservice/course"
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=default
@@ -26,18 +46,22 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://course-mysql:3306/micro_course?useUnicode=true&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=true
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
-      #- EUREKA_INSTANCE_PREFER_IP_ADDRESS=false
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka/
+      #- EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka/
     ports:
-      - '8001:8001'
+      - target: 8001
+        published: 8001
+        protocol: tcp
+        mode: host
+    deploy:
+      replicas: 2
     links:
-      - 'eureka:eureka'
-      - 'course-mysql:course-mysql'
+      - "eureka:eureka"
+      - "course-mysql:course-mysql"
     depends_on:
-      - 'eureka'
-      - 'course-mysql'
+      - "eureka"
+      - "course-mysql"
   user:
-    image: 'microservice/user'
+    image: "microservice/user"
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=default
@@ -46,24 +70,33 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
       #- EUREKA_INSTANCE_PREFER_IP_ADDRESS=false
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka/
+      #- EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka/
     ports:
-      - '8000:8000'
+      - target: 8000
+        published: 8000
+        protocol: tcp
+        mode: host
+    deploy:
+      replicas: 2
     links:
-      - 'eureka:eureka'
-      - 'course-mysql:course-mysql'
+      - "eureka:eureka"
+      - "course-mysql:course-mysql"
     depends_on:
-      - 'eureka'
-      - 'course-mysql'
+      - "eureka"
+      - "course-mysql"
   gateway:
-    image: 'microservice/gateway'
+    image: microservice/gateway
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=default
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka/
     ports:
-      - '9002:8765'
+      - target: 8765
+        published: 9002
+        protocol: tcp
+        mode: host
+    restart: unless-stopped
     links:
-      - 'eureka:eureka'
+      - "eureka:eureka"
     depends_on:
-      - 'eureka'
+      - "eureka"
