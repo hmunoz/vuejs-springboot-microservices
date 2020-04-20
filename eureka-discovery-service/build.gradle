@@ -12,8 +12,29 @@ sourceCompatibility = '1.8'
 
 
 //Set configure docker
-jib.to.image = "microservice/discovery"
-jib.from.image = "openjdk:8-alpine"
+//jib.to.image = "microservice/discovery"
+//jib.from.image = "openjdk:8-alpine"
+//jib.from.image = "openjdkcurl"
+
+
+jib {
+	from {
+		//image = "openjdk:8-alpine"
+	}
+	to {
+		image = "microservice/discovery"
+		//credHelper = 'osxkeychain'
+		//tags = ['tag2', 'latest']
+	}
+	container {
+		//jvmFlags = ['-Xms512m', '-Xdebug', '-Xmy:flag=jib-rules']
+		//mainClass = 'mypackage.MyApp'
+		//args = ["RUN", "apk --no-cache add curl"]
+		//ports = ['1000', '2000-2003/udp']
+		//labels = [key1:'value1', key2:'value2']
+		//format = 'OCI'
+	}
+}
 
 repositories {
 	mavenCentral()
