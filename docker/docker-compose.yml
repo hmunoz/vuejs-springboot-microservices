@@ -6,10 +6,10 @@ services:
     # volumes:
     #     - ~/volumes/jhipster/y/mysql/:/var/lib/mysql/
     environment:
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=root
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=micro_course
+      MYSQL_ROOT_PASSWORD: root
+      # MYSQL_DATABASE: micro_course
+      # MYSQL_USER: root
+      MYSQL_PASSWORD: root
     healthcheck:
       test: ["CMD-SHELL", 'mysqladmin ping']
       interval: 10s
@@ -27,10 +27,10 @@ services:
     # volumes:
     #     - ~/volumes/jhipster/y/mysql/:/var/lib/mysql/
     environment:
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=root
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=micro_user
+      MYSQL_ROOT_PASSWORD: root
+      # MYSQL_DATABASE: micro_user
+      # MYSQL_USER: root
+      MYSQL_PASSWORD: root
     healthcheck:
       test: ["CMD-SHELL", 'mysqladmin ping']
       interval: 10s
@@ -62,17 +62,15 @@ services:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=default
       # - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
-      - SPRING_DATASOURCE_URL=jdbc:mysql://course-mysql:3306/micro_course?useUnicode=true&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=true
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=root
+      #- SPRING_DATASOURCE_URL=jdbc:mysql://course-mysql:3306/micro_course?useUnicode=true&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=true
+      #- SPRING_DATASOURCE_USERNAME=root
+      #- SPRING_DATASOURCE_PASSWORD=root
       #- EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka/
     #ports:
      # - target: 8001
      #   published: 8001
      #   protocol: tcp
       #  mode: host
-    deploy:
-      replicas: 2
     links:
       - "eureka:eureka"
       - "course-mysql:course-mysql"
@@ -85,18 +83,15 @@ services:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=default
       # - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
-      - SPRING_DATASOURCE_URL=jdbc:mysql://user-mysql:3306/micro_user?useUnicode=true&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=true
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=root
-      #- EUREKA_INSTANCE_PREFER_IP_ADDRESS=false
+      #- SPRING_DATASOURCE_URL=jdbc:mysql://user-mysql:3306/micro_user?useUnicode=true&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=true
+      #- SPRING_DATASOURCE_USERNAME=root
+      #- SPRING_DATASOURCE_PASSWORD=root
       #- EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka/
     #ports:
       #- target: 8000
       #  published: 8000
       #  protocol: tcp
       #  mode: host
-    deploy:
-      replicas: 2
     links:
       - "eureka:eureka"
       - "user-mysql:user-mysql"
@@ -108,7 +103,7 @@ services:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=default
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka/
+      #- EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka/
     ports:
       - target: 8765
         published: 9002
