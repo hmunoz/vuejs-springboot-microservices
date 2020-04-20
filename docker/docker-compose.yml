@@ -66,11 +66,11 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
       #- EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka/
-    ports:
-      - target: 8001
-        published: 8001
-        protocol: tcp
-        mode: host
+    #ports:
+     # - target: 8001
+     #   published: 8001
+     #   protocol: tcp
+      #  mode: host
     deploy:
       replicas: 2
     links:
@@ -90,11 +90,11 @@ services:
       - SPRING_DATASOURCE_PASSWORD=root
       #- EUREKA_INSTANCE_PREFER_IP_ADDRESS=false
       #- EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka/
-    ports:
-      - target: 8000
-        published: 8000
-        protocol: tcp
-        mode: host
+    #ports:
+      #- target: 8000
+      #  published: 8000
+      #  protocol: tcp
+      #  mode: host
     deploy:
       replicas: 2
     links:
