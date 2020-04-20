@@ -12,14 +12,9 @@ sourceCompatibility = '1.8'
 
 
 //Set configure docker
-//jib.to.image = "microservice/discovery"
-//jib.from.image = "openjdk:8-alpine"
-//jib.from.image = "openjdkcurl"
-
-
 jib {
 	from {
-		//image = "openjdk:8-alpine"
+		image = "openjdk:8-alpine"
 	}
 	to {
 		image = "microservice/discovery"

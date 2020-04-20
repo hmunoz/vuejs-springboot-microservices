@@ -1,6 +1,22 @@
 version: '3.3'
 services:
   #https://github.com/cer/microservices-examples/blob/master/docker-compose.yml
+  grafana:
+    image: grafana/grafana:5.4.2
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prom
+  prom:
+    image: prom/prometheus:v2.6.0
+    volumes:
+        - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command: "--config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus"
+    ports:
+      - 9090:9090
+    depends_on:
+      - course
+
   course-mysql:
     image: mysql:8.0.19
     # volumes:
@@ -103,7 +119,6 @@ services:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=default
-      #- EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka/
     ports:
       - target: 8765
         published: 9002
